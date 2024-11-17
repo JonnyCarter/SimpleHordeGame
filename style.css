@@ -10,5 +10,7 @@ body, html {
   
   #gameCanvas {
     background-color: #000;
+    width: 600px; /* Fixed width for focused gameplay */
+    height: 100%; /* Full height of the viewport */
   }
   

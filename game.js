@@ -82,7 +82,7 @@ function updatePlayer() {
     ctx.fillStyle = player.color;
     ctx.fillRect(player.x, player.y, player.width, player.height);
   }
-  
+
   // Update and Draw Bullets
 function updateBullets() {
     bullets.forEach((bullet, index) => {
@@ -95,6 +95,23 @@ function updateBullets() {
     });
   }
 
+  function detectCollisions() {
+    bullets.forEach((bullet, bulletIndex) => {
+      enemies.forEach((enemy, enemyIndex) => {
+        // Check for collision between bullet and enemy
+        if (
+          bullet.x < enemy.x + enemy.width &&
+          bullet.x + bullet.width > enemy.x &&
+          bullet.y < enemy.y + enemy.height &&
+          bullet.y + bullet.height > enemy.y
+        ) {
+          // Remove bullet and enemy on collision
+          bullets.splice(bulletIndex, 1);
+          enemies.splice(enemyIndex, 1);
+        }
+      });
+    });
+  }
 
   document.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowLeft') keys.left = false;
@@ -118,6 +135,8 @@ function gameLoop() {
   updateBullets();
   updateEnemies();
   updatePlayer();
+  detectCollisions();
+
 
   requestAnimationFrame(gameLoop);
 }

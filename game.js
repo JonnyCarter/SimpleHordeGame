@@ -8,6 +8,11 @@ canvas.height = window.innerHeight;
 const bullets = [];
 const bulletSpeed = 8 ;
 
+// Enemy Setup
+const enemies = [];
+const enemySpeed = 2;
+const enemySpawnInterval = 1000; // Spawn every second
+
 // Player Setup
 const player = {
   x: canvas.width / 2,
@@ -18,6 +23,34 @@ const player = {
   color: 'blue',
   bullets: []
 };
+
+// Function to Spawn Enemies
+function spawnEnemy() {
+    enemies.push({
+      x: Math.random() * (canvas.width - 30), // Random horizontal position
+      y: -30, // Start above the canvas
+      width: 30,
+      height: 30,
+      color: 'red'
+    });
+  }
+
+  // Update and Draw Enemies
+function updateEnemies() {
+    enemies.forEach((enemy, index) => {
+      enemy.y += enemySpeed; // Move enemy down
+  
+      // Remove enemies that move off the screen
+      if (enemy.y > canvas.height) enemies.splice(index, 1);
+  
+      // Draw Enemy
+      ctx.fillStyle = enemy.color;
+      ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+    });
+  }
+
+  setInterval(spawnEnemy, enemySpawnInterval);
+
 
 // Shoot Bullet Function
 function shootBullet() {
@@ -59,6 +92,7 @@ function gameLoop() {
   ctx.fillStyle = player.color;
   ctx.fillRect(player.x, player.y, player.width, player.height);
   updateBullets();
+  updateEnemies();
 
   requestAnimationFrame(gameLoop);
 }

@@ -13,6 +13,12 @@ const enemies = [];
 const enemySpeed = 2;
 const enemySpawnInterval = 1000; // Spawn every second
 
+// Track Key States
+const keys = {
+    left: false,
+    right: false,
+  };
+
 // Player Setup
 const player = {
   x: canvas.width / 2,
@@ -63,6 +69,20 @@ function shootBullet() {
     });
   }
 
+
+  // Update Player Position Based on Key States
+function updatePlayer() {
+    if (keys.left) player.x -= player.speed;
+    if (keys.right) player.x += player.speed;
+  
+    // Keep Player Within Canvas Bounds
+    player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+  
+    // Draw Player
+    ctx.fillStyle = player.color;
+    ctx.fillRect(player.x, player.y, player.width, player.height);
+  }
+  
   // Update and Draw Bullets
 function updateBullets() {
     bullets.forEach((bullet, index) => {
@@ -76,12 +96,16 @@ function updateBullets() {
   }
 
 
+  document.addEventListener('keyup', (e) => {
+    if (e.key === 'ArrowLeft') keys.left = false;
+    if (e.key === 'ArrowRight') keys.right = false;
+  });
+
 // Control Player Movement
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowLeft') player.x -= player.speed;
-  if (e.key === 'ArrowRight') player.x += player.speed;
+    if (e.key === 'ArrowLeft') keys.left = true;
+    if (e.key === 'ArrowRight') keys.right = true;
   if (e.key === ' ') shootBullet();
-  player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
 });
 
 // Main Game Loop
@@ -93,6 +117,7 @@ function gameLoop() {
   ctx.fillRect(player.x, player.y, player.width, player.height);
   updateBullets();
   updateEnemies();
+  updatePlayer();
 
   requestAnimationFrame(gameLoop);
 }

@@ -88,8 +88,8 @@ function updateBoost() {
 function activateBoost() {
   boostActive = true;
   boostEndTime = Date.now() + 5000; // Boost lasts 5 seconds
-  if(boost.hitCount >20){
-    createClones(40); // Create clones based on the hit count
+  if(boost.hitCount >10){
+    createClones(5); // Create clones based on the hit count
 
   } else{
     createClones(boost.hitCount); // Create clones based on the hit count
